@@ -9,16 +9,21 @@
 #pragma once
 
 #include <array>
+#include <string>
+#include <map>
 
 class Cube {
 public:
     Cube();
 
-    bool isSolved() const;
+    [[nodiscard]] bool isSolved() const;
     void print() const;
+    void doMove(const std::string& move);
+    void turnFaceClockwise(char layer);
 
 private:
-    std::array<char, 54> stickers;
+    std::array<char, 54> stickers{};
+    std::map<char,int> startPos = {{'U',0},{'L',9},{'F',18},{'R',27},{'B',36},{'D',45}};
 };
 
 

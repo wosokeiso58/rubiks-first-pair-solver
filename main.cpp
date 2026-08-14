@@ -3,7 +3,7 @@
 
 int main() {
     Cube cube;
-
+    
     cube.print();
 
     std::cout << "Solved: "
