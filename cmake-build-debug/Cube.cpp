@@ -4,6 +4,7 @@
 
 #include "Cube.h"
 #include <iostream>
+#include <algorithm>
 
 Cube::Cube() {
     for (int i = 0; i < 9; ++i)
@@ -187,6 +188,49 @@ std::string Cube::coloursAtEdge(const std::string &edge){
         colours+=stickers[i];
     }
     return colours;
+}
+
+std::string Cube::findPair(const std::string &cornerColours){
+    std::string edge;
+    edge=edge+cornerColours[1]+cornerColours[2];
+    return "corner: "+cornerColours+"\ncorner position: "+ findCorner(cornerColours) + "\nedge: " +edge+ "\nedge position: "+
+            findEdge(edge);
+}
+
+std::string Cube::findCorner(const std::string &cornerColours){
+    for (const auto& [key, value] : corners) {
+        std::string colours;
+        for(const auto& pos: value){
+            colours+=stickers[pos];
+        }
+        if(sameCorner(colours,cornerColours)){
+            return key;
+        }
+    }
+    return "corner no match";
+}
+std::string Cube::findEdge(const std::string &cornerColours){
+    for (const auto& [key, value] : edges) {
+        std::string colours;
+        for(const auto& pos: value){
+            colours+=stickers[pos];
+        }
+        if(sameEdge(colours,cornerColours)){
+            return key;
+        }
+    }
+    return "edge no match";
+}
+
+bool Cube::sameCorner(std::string corner1, std::string corner2){
+    std::sort(corner1.begin(),corner1.end());
+    std::sort(corner2.begin(),corner2.end());
+    return corner1==corner2;
+}
+bool Cube::sameEdge(std::string edge1, std::string edge2){
+    std::sort(edge1.begin(),edge1.end());
+    std::sort(edge2.begin(),edge2.end());
+    return edge1==edge2;
 }
 
 void Cube::doMove(const char &move) {

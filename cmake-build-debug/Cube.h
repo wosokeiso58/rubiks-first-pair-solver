@@ -19,11 +19,14 @@ public:
     [[nodiscard]] bool isSolved() const;
     std::string coloursAtCorner(const std::string &corner);
     std::string coloursAtEdge(const std::string &edge);
+    std::string findCorner(const std::string &cornerColours);
+    std::string findEdge(const std::string &cornerColours);
+
     void print() const;
     void doMoveSequence(const std::string &move);
 
 
-
+    std::string findPair(const std::string &cornerColours);
 
 private:
     std::array<char, 54> stickers{};
@@ -63,6 +66,11 @@ private:
     void rotateFaceStickersClockwise(char layer);
     void rotateFaceStickersAntiClockwise(char layer);
     void doRotation(const std::string &move);
+
+    bool sameCorner(std::string corner1, std::string corner2);
+
+    bool sameEdge(std::string edge1, std::string edge2);
+
 };
 
 
