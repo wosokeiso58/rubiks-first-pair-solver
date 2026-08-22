@@ -21,6 +21,10 @@ Cube::Cube() {
         stickers[i] = 'Y';
 }
 
+bool Cube::isWhiteCrossSolved(){
+    return isEdgeSolved("WG")&&isEdgeSolved("WO")&&isEdgeSolved("WR")&&isEdgeSolved("WB");
+}
+
 bool Cube::isSolved() const {
     for (int face = 0; face < 6; ++face) {
         int start = face * 9;
@@ -167,70 +171,189 @@ void Cube::doMoveSequence(const std::string &move) {
                 } else {
                     doMove(curr);
                 }
-            }
-            else{
+            } else {
                 doMove(curr);
             }
         }
     }
 }
 
-std::string Cube::coloursAtCorner(const std::string &corner){
+std::string Cube::coloursAtCorner(const std::string &corner) {
     std::string colours;
-    for(int i : corners[corner]){
-        colours+=stickers[i];
-    }
-    return colours;
-}
-std::string Cube::coloursAtEdge(const std::string &edge){
-    std::string colours;
-    for(int i : edges[edge]){
-        colours+=stickers[i];
+    for (int i: corners[corner]) {
+        colours += stickers[i];
     }
     return colours;
 }
 
-std::string Cube::findPair(const std::string &cornerColours){
+std::string Cube::coloursAtEdge(const std::string &edge) {
+    std::string colours;
+    for (int i: edges[edge]) {
+        colours += stickers[i];
+    }
+    return colours;
+}
+
+std::string Cube::findPair(const std::string &cornerColours) {
     std::string edge;
-    edge=edge+cornerColours[1]+cornerColours[2];
-    return "corner: "+cornerColours+"\ncorner position: "+ findCorner(cornerColours) + "\nedge: " +edge+ "\nedge position: "+
-            findEdge(edge);
+    edge = edge + cornerColours[1] + cornerColours[2];
+    return "corner: " + cornerColours + "\ncorner position: " + findCorner(cornerColours) + "\nedge: " + edge +
+           "\nedge position: " +
+           findEdge(edge);
 }
 
-std::string Cube::findCorner(const std::string &cornerColours){
-    for (const auto& [key, value] : corners) {
+
+std::string Cube::findCorner(const std::string &cornerColours) {
+    for (const auto &[key, value]: corners) {
         std::string colours;
-        for(const auto& pos: value){
-            colours+=stickers[pos];
+        for (const auto &pos: value) {
+            colours += stickers[pos];
         }
-        if(sameCorner(colours,cornerColours)){
+        if (sameCorner(colours, cornerColours)) {
             return key;
         }
     }
     return "corner no match";
 }
-std::string Cube::findEdge(const std::string &cornerColours){
-    for (const auto& [key, value] : edges) {
-        std::string colours;
-        for(const auto& pos: value){
-            colours+=stickers[pos];
+
+char Cube::findWhiteOfCorner(const std::string &cornerPos) {
+    std::array<int, 3> positions = corners[cornerPos];
+    for (int i = 0; i < 3; i++) {
+        if (stickers[positions[i]] == 'W') {
+            return cornerPos[i];
         }
-        if(sameEdge(colours,cornerColours)){
+    }
+    std::cout << "WRONG";
+    return 'Z';
+}
+
+
+std::string Cube::findEdge(const std::string &edge) const {
+    for (const auto &[key, value]: edges) {
+        std::string colours;
+        for (const auto &pos: value) {
+            colours += stickers[pos];
+        }
+        if (sameEdge(colours, edge)) {
             return key;
         }
     }
     return "edge no match";
 }
 
-bool Cube::sameCorner(std::string corner1, std::string corner2){
-    std::sort(corner1.begin(),corner1.end());
-    std::sort(corner2.begin(),corner2.end());
-    return corner1==corner2;
+bool Cube::isEdgeSolved(const std::string& edge){
+    bool flag = true;
+    std::string edgePos = findEdge(edge);
+    std::array<int,2> edgeIndexes = edges[edgePos];
+    for(int i = 0; i<2; i++){
+        if(stickers[startPos[edgePos[i]]+4] != stickers[edgeIndexes[i]]){
+            flag = false;
+        }
+    }
+    return flag;
 }
-bool Cube::sameEdge(std::string edge1, std::string edge2){
-    std::sort(edge1.begin(),edge1.end());
-    std::sort(edge2.begin(),edge2.end());
-    return edge1==edge2;
+
+bool Cube::sameCorner(std::string corner1, std::string corner2) {
+    std::sort(corner1.begin(), corner1.end());
+    std::sort(corner2.begin(), corner2.end());
+    return corner1 == corner2;
+}
+
+bool Cube::sameEdge(std::string edge1, std::string edge2) const {
+    std::sort(edge1.begin(), edge1.end());
+    std::sort(edge2.begin(), edge2.end());
+    return edge1 == edge2;
+}
+
+bool Cube::isPaired(const std::string &cornerColours) {
+
+    int count = 0;
+    std::string cornerPos = findCorner(cornerColours);
+    std::array pairCols = corners[cornerPos];
+    char crossLayer = findWhiteOfCorner(cornerPos);
+    if (crossLayer == 'U') {
+        for (int i = 0; i < 2; i++) {
+            if (cornerPos[i] != crossLayer) {
+                int pos = pairCols[i];
+                if (stickers[pos] == stickers[pos + 3]) {
+                    count++;
+                }
+            }
+        }
+    } else if (crossLayer == 'D') {
+        for (int i = 0; i < 3; i++) {
+            if (cornerPos[i] != crossLayer) {
+                int pos = pairCols[i];
+                if (stickers[pos] == stickers[pos - 3]) {
+                    count++;
+                }
+            }
+        }
+    } else if (crossLayer == 'R') {
+        for (int i = 0; i < 3; i++) {
+            if (cornerPos[i] != crossLayer) {
+                int pos = pairCols[i];
+                if (stickers[pos] == stickers[pos - 1]) {
+                    count++;
+                }
+            }
+        }
+    } else if (crossLayer == 'L') {
+        for (int i = 0; i < 3; i++) {
+            if (cornerPos[i] != crossLayer) {
+                int pos = pairCols[i];
+                int k;
+                if (cornerPos[i] == 'B') {
+                    k = -1;
+                } else {
+                    k = 1;
+                }
+                if (stickers[pos] == stickers[pos + k]) {
+                    count++;
+                }
+            }
+        }
+    } else if (crossLayer == 'F') {
+        for (int i = 0; i < 3; i++) {
+            if (cornerPos[i] != crossLayer) {
+                int k;
+                int pos = pairCols[i];
+                if (cornerPos[i] == 'L') {
+                    k = -1;
+                } else if (cornerPos[i] == 'R') {
+                    k = 1;
+                } else if (cornerPos[i] == 'D') {
+                    k = 3;
+                } else if (cornerPos[i] == 'U') {
+                    k = -3;
+                }
+                if (stickers[pos] == stickers[pos + k]) {
+                    count++;
+                }
+            }
+        }
+    } else if (crossLayer == 'B') {
+        for (int i = 0; i < 3; i++) {
+            if (cornerPos[i] != crossLayer) {
+                int k;
+                int pos = pairCols[i];
+                if (cornerPos[i] == 'L') {
+                    k = 1;
+                } else if (cornerPos[i] == 'R') {
+                    k = -1;
+                } else if (cornerPos[i] == 'D') {
+                    k = -3;
+                } else if (cornerPos[i] == 'U') {
+                    k = 3;
+                }
+                if (stickers[pos] == stickers[pos + k]) {
+                    count++;
+                }
+            }
+        }
+    }
+
+    return count > 1;
 }
 
 void Cube::doMove(const char &move) {
