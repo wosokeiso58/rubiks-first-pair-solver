@@ -4,28 +4,15 @@
 int main() {
     Cube cube;
     cube.doMoveSequence("");
-
     cube.print();
 
     std::cout << "\n"
-              << "Paired: "
+              << "Is WGR paired? "
               << (cube.isPaired("WGR") ? "yes" : "no")
               << "\n";
     std::cout << "\n"
-              << "Paired: "
+              << "Is WBR paired? "
               << (cube.isPaired("WBR") ? "yes" : "no")
-              << "\n";
-    std::cout << "\n"
-              << "Paired: "
-              << (cube.isPaired("WGO") ? "yes" : "no")
-              << "\n";
-    std::cout << "\n"
-              << "Paired: "
-              << (cube.isPaired("WOB") ? "yes" : "no")
-              << "\n";
-    std::cout << "\n"
-              << "Cross solved?: "
-              << (cube.isWhiteCrossSolved() ? "yes" : "no")
               << "\n";
 
 

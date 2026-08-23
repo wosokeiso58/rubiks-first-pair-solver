@@ -21,7 +21,6 @@ public:
     std::string coloursAtEdge(const std::string &edge);
     std::string findCorner(const std::string &cornerColours);
     std::string findEdge(const std::string &cornerColours) const;
-
     void print() const;
     void doMoveSequence(const std::string &move);
 
@@ -29,6 +28,12 @@ public:
     std::string findPair(const std::string &cornerColours);
 
     bool isPaired(const std::string &cornerColours);
+
+    bool isCornerSolved(const std::string &edge);
+
+    bool isEdgeSolved(const std::string& edge);
+
+    bool isPairSolved(const std::string& corner);
 
 private:
     std::array<char, 54> stickers{};
@@ -47,7 +52,7 @@ private:
                                                      {"UB",{1,37}},
                                                      {"UR",{5,28}},
                                                      {"UL",{3,10}},
-                                                     {"FD",{46,25}},
+                                                     {"FD",{25,46}},
                                                      {"FR",{23,30}},
                                                      {"FL",{21,14}},
                                                      {"DR",{50,34}},
@@ -77,7 +82,8 @@ private:
 
 
 
-    bool isEdgeSolved(const std::string& edge);
+
+
 };
 
 

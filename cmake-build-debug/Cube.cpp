@@ -253,6 +253,24 @@ bool Cube::isEdgeSolved(const std::string& edge){
     return flag;
 }
 
+bool Cube::isCornerSolved(const std::string& corner){
+    bool flag = true;
+    std::string cornerPos = findCorner(corner);
+    std::array<int,3> cornerIndexes = corners[cornerPos];
+    for(int i = 0; i<3; i++){
+        if(stickers[startPos[cornerPos[i]]+4] != stickers[cornerIndexes[i]]){
+            flag = false;
+        }
+    }
+    return flag;
+}
+
+bool Cube::isPairSolved(const std::string& corner){
+    std::string edge;
+    edge=edge+corner[1]+corner[2];
+    return (isCornerSolved(corner)&&isEdgeSolved(edge));
+}
+
 bool Cube::sameCorner(std::string corner1, std::string corner2) {
     std::sort(corner1.begin(), corner1.end());
     std::sort(corner2.begin(), corner2.end());
@@ -271,8 +289,9 @@ bool Cube::isPaired(const std::string &cornerColours) {
     std::string cornerPos = findCorner(cornerColours);
     std::array pairCols = corners[cornerPos];
     char crossLayer = findWhiteOfCorner(cornerPos);
+    std::cout << crossLayer;
     if (crossLayer == 'U') {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             if (cornerPos[i] != crossLayer) {
                 int pos = pairCols[i];
                 if (stickers[pos] == stickers[pos + 3]) {
@@ -927,3 +946,4 @@ void Cube::print() const {
 
 
 }
+//TODO: making a pair has to make sure no built pairs are broken.
