@@ -5,6 +5,8 @@
 #include "Cube.h"
 #include <iostream>
 #include <algorithm>
+#include <vector>
+#include <queue>
 
 Cube::Cube() {
     for (int i = 0; i < 9; ++i)
@@ -19,6 +21,95 @@ Cube::Cube() {
         stickers[i] = 'B';
     for (int i = 45; i < 54; ++i)
         stickers[i] = 'Y';
+}
+
+Cube::Cube(std::array<char,54> state){
+    stickers = state;
+}
+
+const std::array<char, 54> &Cube::getStickers() const {
+    return stickers;
+}
+
+std::string Cube::toString(){
+    std::string state;
+    for(char i : stickers){
+        state+=i;
+    }
+    return state;
+}
+
+struct Node {
+    Cube cube;
+    std::string moves;
+};
+
+std::vector<Node> generateNeighbours(const Node& curr){
+    std::vector<Node> reachable;
+    Node node1;
+    node1.cube=Cube(curr.cube.getStickers());
+    node1.cube.doMoveSequence("R");
+    node1.moves=curr.moves+'R';
+    reachable.push_back(node1);
+    Node node2;
+    node2.cube=Cube(curr.cube.getStickers());
+    node2.cube.doMoveSequence("R'");
+    node2.moves=curr.moves+"R'";
+    reachable.push_back(node2);
+    Node node3;
+    node3.cube=Cube(curr.cube.getStickers());
+    node3.cube.doMoveSequence("U");
+    node3.moves=curr.moves+'U';
+    reachable.push_back(node3);
+    Node node4;
+    node4.cube=Cube(curr.cube.getStickers());
+    node4.cube.doMoveSequence("U'");
+    node4.moves=curr.moves+"U'";
+    reachable.push_back(node4);
+    Node node5;
+    node5.cube=Cube(curr.cube.getStickers());
+    node5.cube.doMoveSequence("D");
+    node5.moves=curr.moves+'D';
+    reachable.push_back(node5);
+    Node node6;
+    node6.cube=Cube(curr.cube.getStickers());
+    node6.cube.doMoveSequence("D'");
+    node6.moves=curr.moves+"D'";
+    reachable.push_back(node6);
+    return reachable;
+}
+
+std::string Cube::crossPlusOne(){
+    std::queue<Node> queue;
+    Node first;
+    first.cube=Cube(stickers);
+    first.moves="";
+
+    std::unordered_set<std::string> visited;
+    visited.insert(first.cube.toString());
+    queue.push(first);
+    while (!queue.empty()) {
+        Node curr = queue.front();
+        queue.pop();
+        if (curr.cube.goal()) {
+            return curr.moves;
+        }
+
+        for (Node neighbour : generateNeighbours(curr)) {
+            std::string key = neighbour.cube.toString();
+            if (!visited.contains(key)) {
+                visited.insert(key);
+                queue.push(neighbour);
+            }
+        }
+    }
+
+    return "No solution found";
+
+}
+
+bool Cube::goal(){
+    return (isPaired("WGR")&&isWhiteCrossSolved());
 }
 
 bool Cube::isWhiteCrossSolved(){
@@ -289,7 +380,6 @@ bool Cube::isPaired(const std::string &cornerColours) {
     std::string cornerPos = findCorner(cornerColours);
     std::array pairCols = corners[cornerPos];
     char crossLayer = findWhiteOfCorner(cornerPos);
-    std::cout << crossLayer;
     if (crossLayer == 'U') {
         for (int i = 0; i < 3; i++) {
             if (cornerPos[i] != crossLayer) {

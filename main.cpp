@@ -3,17 +3,9 @@
 
 int main() {
     Cube cube;
-    cube.doMoveSequence("");
+    cube.doMoveSequence("R U F");
     cube.print();
-
-    std::cout << "\n"
-              << "Is WGR paired? "
-              << (cube.isPaired("WGR") ? "yes" : "no")
-              << "\n";
-    std::cout << "\n"
-              << "Is WBR paired? "
-              << (cube.isPaired("WBR") ? "yes" : "no")
-              << "\n";
+    std::cout << cube.crossPlusOne();
 
 
 }

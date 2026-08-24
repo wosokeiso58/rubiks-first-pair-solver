@@ -16,24 +16,16 @@
 class Cube {
 public:
     Cube();
-    [[nodiscard]] bool isSolved() const;
-    std::string coloursAtCorner(const std::string &corner);
-    std::string coloursAtEdge(const std::string &edge);
-    std::string findCorner(const std::string &cornerColours);
-    std::string findEdge(const std::string &cornerColours) const;
+
+    Cube(std::array<char, 54> state);
+
     void print() const;
+
+    const std::array<char, 54> &getStickers() const;
+
     void doMoveSequence(const std::string &move);
 
-    bool isWhiteCrossSolved();
-    std::string findPair(const std::string &cornerColours);
-
-    bool isPaired(const std::string &cornerColours);
-
-    bool isCornerSolved(const std::string &edge);
-
-    bool isEdgeSolved(const std::string& edge);
-
-    bool isPairSolved(const std::string& corner);
+    std::string crossPlusOne();
 
 private:
     std::array<char, 54> stickers{};
@@ -60,8 +52,11 @@ private:
                                                      {"DL",{48,16}},
                                                      {"BR",{39,32}},
                                                      {"BL",{41,12}}};
-
-
+    [[nodiscard]] bool isSolved() const;
+    std::string coloursAtCorner(const std::string &corner);
+    std::string coloursAtEdge(const std::string &edge);
+    std::string findCorner(const std::string &cornerColours);
+    std::string findEdge(const std::string &cornerColours) const;
     void turnFaceAntiClockwise(char layer);
 
     void doMovePrime(const char &move);
@@ -79,11 +74,21 @@ private:
     bool sameEdge(std::string edge1, std::string edge2) const;
 
     char findWhiteOfCorner(const std::string &cornerColours);
+    bool isWhiteCrossSolved();
+    std::string findPair(const std::string &cornerColours);
+
+    bool isPaired(const std::string &cornerColours);
+
+    bool isCornerSolved(const std::string &edge);
+
+    bool isEdgeSolved(const std::string& edge);
+
+    bool isPairSolved(const std::string& corner);
 
 
+    bool goal();
 
-
-
+    std::string toString();
 };
 
 
