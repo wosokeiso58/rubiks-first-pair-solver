@@ -10,17 +10,17 @@
 
 Cube::Cube() {
     for (int i = 0; i < 9; ++i)
-        stickers[i] = 'W';
+        stickers[i] = 'Y';
     for (int i = 9; i < 18; ++i)
-        stickers[i] = 'O';
+        stickers[i] = 'R';
     for (int i = 18; i < 27; ++i)
         stickers[i] = 'G';
     for (int i = 27; i < 36; ++i)
-        stickers[i] = 'R';
+        stickers[i] = 'O';
     for (int i = 36; i < 45; ++i)
         stickers[i] = 'B';
     for (int i = 45; i < 54; ++i)
-        stickers[i] = 'Y';
+        stickers[i] = 'W';
 }
 
 Cube::Cube(std::array<char,54> state){
@@ -42,61 +42,58 @@ std::string Cube::toString(){
 struct Node {
     Cube cube;
     std::string moves;
+    int h;
+    int g;
+    int f() const {
+        return g + h;
+    }
+    bool operator<(const Node& other) const {
+        return f() > other.f();
+    }
 };
 
 std::vector<Node> generateNeighbours(const Node& curr){
     std::vector<Node> reachable;
-    Node node1;
-    node1.cube=Cube(curr.cube.getStickers());
-    node1.cube.doMoveSequence("R");
-    node1.moves=curr.moves+'R';
-    reachable.push_back(node1);
-    Node node2;
-    node2.cube=Cube(curr.cube.getStickers());
-    node2.cube.doMoveSequence("R'");
-    node2.moves=curr.moves+"R'";
-    reachable.push_back(node2);
-    Node node3;
-    node3.cube=Cube(curr.cube.getStickers());
-    node3.cube.doMoveSequence("U");
-    node3.moves=curr.moves+'U';
-    reachable.push_back(node3);
-    Node node4;
-    node4.cube=Cube(curr.cube.getStickers());
-    node4.cube.doMoveSequence("U'");
-    node4.moves=curr.moves+"U'";
-    reachable.push_back(node4);
-    Node node5;
-    node5.cube=Cube(curr.cube.getStickers());
-    node5.cube.doMoveSequence("D");
-    node5.moves=curr.moves+'D';
-    reachable.push_back(node5);
-    Node node6;
-    node6.cube=Cube(curr.cube.getStickers());
-    node6.cube.doMoveSequence("D'");
-    node6.moves=curr.moves+"D'";
-    reachable.push_back(node6);
+    std::array<std::string,24> testMoves = {"U","U'","F","F'","R","R'","L","L'","B","B'","D","D'","R2","U2","D2","L2","F2"};
+    for(std::string move : testMoves){
+        Node node;
+        node.cube=Cube(curr.cube.getStickers());
+        node.cube.doMoveSequence(move);
+        node.moves=curr.moves+move;
+        reachable.push_back(node);
+    }
     return reachable;
 }
 
 std::string Cube::crossPlusOne(){
-    std::queue<Node> queue;
+    int statesChecked = 0;
+    int maxQueue = 0;
+    int statesGenerated = 0;
+    std::priority_queue<Node> queue;
     Node first;
     first.cube=Cube(stickers);
-    first.moves="";
-
+    first.moves;
+    first.g=0;
+    first.h = heuristic(first.cube);
+    queue.push(first);
     std::unordered_set<std::string> visited;
     visited.insert(first.cube.toString());
-    queue.push(first);
     while (!queue.empty()) {
-        Node curr = queue.front();
+        Node curr = queue.top();
         queue.pop();
+        statesChecked++;
         if (curr.cube.goal()) {
+            maxQueue = std::max(maxQueue, (int)queue.size());
+            std::cout <<"\nStates generated: "<< statesGenerated << "\nStates checked: " << statesChecked << "\nMax Queue: " << maxQueue<< "\nSolution: ";
             return curr.moves;
         }
 
         for (Node neighbour : generateNeighbours(curr)) {
+            statesGenerated++;
             std::string key = neighbour.cube.toString();
+            neighbour.g = curr.g + 1;
+            neighbour.h = heuristic(neighbour.cube);
+
             if (!visited.contains(key)) {
                 visited.insert(key);
                 queue.push(neighbour);
@@ -108,12 +105,93 @@ std::string Cube::crossPlusOne(){
 
 }
 
+int Cube::heuristic(Cube cube){
+    int score = 0;
+    for(auto &pos:cube.goodFace){
+        if(cube.stickers[pos]!='W')
+            score+=2;
+    }
+    return score;
+}
+
+int Cube::bestPairScore(){
+    int bestScore = 9999;
+
+    for(auto pair : f2l){
+        std::string edge;
+        edge += pair[1];
+        edge += pair[2];
+        int score = 0;
+        if(!isPaired(pair))
+            score+=40;
+        if(findEdge(edge).find('U') != std::string::npos)
+            score+=10;
+        if(findCorner(pair).find('U') != std::string::npos)
+            score+=10;
+        for(auto move : testMoves){
+            Cube test;
+            test.stickers = stickers;
+            test.doMoveSequence(move);
+            if(!test.isPaired(pair)){
+                score-=10;
+            }
+        }
+
+        bestScore = std::min(bestScore, score);
+
+    }
+    return bestScore;
+}
+
+int Cube::countMisorientedEdges(){
+    int count = 0;
+    std::array<char,54> cubeState = stickers;
+    for (const auto &[key, value]: edges) {
+        if(coloursAtEdge(key).find('W')== std::string::npos&&coloursAtEdge(key).find('Y')== std::string::npos){
+            if(stickers[value[0]]=='B'||stickers[value[0]]=='G'){
+                count++;
+            }
+        }
+        else{
+            if(stickers[value[0]]=='W'||stickers[value[0]]=='Y'){
+                count++;
+            }
+        }
+    }
+    return 12-count;
+}
 bool Cube::goal(){
-    return (isPaired("WGR")&&isWhiteCrossSolved());
+    return (isWhiteCrossSolved());
+}
+
+int Cube::countF2LNotPaired(){
+    int count = 4;
+    if(isPaired("WGR"))
+        count--;
+    if(isPaired("WOB"))
+        count--;
+    if(isPaired("WBR"))
+        count--;
+    if(isPaired("WGO"))
+        count--;
+    return count;
 }
 
 bool Cube::isWhiteCrossSolved(){
-    return isEdgeSolved("WG")&&isEdgeSolved("WO")&&isEdgeSolved("WR")&&isEdgeSolved("WB");
+    return countUnsolvedCrossEdges()==0;
+}
+
+int Cube::countUnsolvedCrossEdges(){
+    int count = 4;
+    if(isEdgeSolved("WR"))
+        count--;
+    if(isEdgeSolved("WO"))
+        count--;
+    if(isEdgeSolved("WB"))
+        count--;
+    if(isEdgeSolved("WG"))
+        count--;
+    return count;
 }
 
 bool Cube::isSolved() const {
@@ -314,7 +392,7 @@ char Cube::findWhiteOfCorner(const std::string &cornerPos) {
             return cornerPos[i];
         }
     }
-    std::cout << "WRONG";
+    std::cout << "This is where things went WRONG";
     return 'Z';
 }
 
@@ -1036,4 +1114,3 @@ void Cube::print() const {
 
 
 }
-//TODO: making a pair has to make sure no built pairs are broken.
