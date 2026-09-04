@@ -25,12 +25,14 @@ public:
 
     void doMoveSequence(const std::string &move);
 
-    std::string crossPlusOne();
+    std::string cross();
 
-    int countMisorientedEdges();
+    int countOrientedEdges();
 
 
     static int heuristic(const Cube);
+
+    std::string firstPair();
 
 private:
     std::array<char, 54> stickers{};
@@ -63,6 +65,14 @@ private:
                                                      {"DB",{52,43}},
                                                      {"DL",{48,16}},
                                                      {"DF",{46,25}},
+                                                     {"BR",{39,32}},
+                                                     {"BL",{41,12}}};
+    std::map<std::string,std::array<int,2>> f2lEdges = {{"UF",{7,19}},
+                                                     {"UB",{1,37}},
+                                                     {"UR",{5,28}},
+                                                     {"UL",{3,10}},
+                                                     {"FR",{23,30}},
+                                                     {"FL",{21,14}},
                                                      {"BR",{39,32}},
                                                      {"BL",{41,12}}};
 
@@ -111,6 +121,7 @@ private:
 
     int countF2LNotPaired();
 
+    int pairHeuristic(Cube cube);
 };
 
 
