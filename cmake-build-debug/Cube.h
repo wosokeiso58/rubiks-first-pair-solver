@@ -12,6 +12,7 @@
 #include <string>
 #include <map>
 #include <unordered_set>
+#include <vector>
 
 class Cube {
 public:
@@ -20,29 +21,31 @@ public:
     Cube(std::array<char, 54> state);
 
     void print() const;
+    int oneFace(const std::vector<std::string>& solution);
 
     const std::array<char, 54> &getStickers() const;
 
     void doMoveSequence(const std::string &move);
 
-    std::string cross();
+    std::vector<std::string> cross();
 
     int countOrientedEdges();
+    int evaluateSolution(const std::vector<std::string>& solution);
 
+    int heuristic();
 
-    static int heuristic(const Cube);
+    std::vector<std::string> firstPair();
 
-    std::string firstPair();
+    void doMoveSequence(const std::vector<std::string> &moves);
 
 private:
     std::array<char, 54> stickers{};
     std::map<char,int> startPos = {{'U',0},{'L',9},{'F',18},{'R',27},{'B',36},{'D',45}};
     std::unordered_set<char> validChar{'R','r','L','l','F','f','B','b','D','d','U','u','E','S','M','x','y','z'};
-
     std::array<int,12> oneMove{21, 23, 30, 32, 39, 41, 12, 14, 48, 50, 46, 52};
 
     std::array<int,4> goodFace{46,48,50,52};
-    std::array<char,4> goodEdge{46,48,50,52};
+    std::array<int,8> annoyingYellows{25,34,43,16,46,48,50,52};
 
     std::array<std::string,12> testMoves = {"U","U'","F","F'","R","R'","L","L'"};
 
@@ -54,7 +57,6 @@ private:
                                                        {"DFR",{47,26,33}},
                                                        {"DBR",{53,42,35}},
                                                        {"DBL",{51,44,15}}};
-
     std::map<std::string,std::array<int,2>> edges = {{"UF",{7,19}},
                                                      {"UB",{1,37}},
                                                      {"UR",{5,28}},
@@ -83,6 +85,7 @@ private:
 
     std::string findCorner(const std::string &cornerColours);
     std::string findEdge(const std::string &cornerColours) const;
+
     void turnFaceAntiClockwise(char layer);
 
     void doMovePrime(const char &move);
@@ -113,7 +116,7 @@ private:
     int bestPairScore();
 
 
-    bool goal();
+    bool goal(const std::string& pair);
 
     std::string toString();
 
@@ -121,7 +124,18 @@ private:
 
     int countF2LNotPaired();
 
-    int pairHeuristic(Cube cube);
+    int pairHeuristic(const std:: string& pair);
+
+    int countAnnoyingYellows();
+
+    int countFMoves(const std::vector<std::string>& solution);
+
+    int countDoubleMoves(const std::vector<std::string> &solutionV);
+
+    bool isJoint(const std::string &cornerColours);
+
+    bool isSplitPaired(const std::string &pair);
+
 };
 
 

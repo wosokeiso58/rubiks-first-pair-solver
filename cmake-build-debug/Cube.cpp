@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <vector>
 #include <queue>
+#include <unordered_map>
 
 Cube::Cube() {
     for (int i = 0; i < 9; ++i)
@@ -41,7 +42,7 @@ std::string Cube::toString() {
 
 struct Node {
     Cube cube;
-    std::string moves;
+    std::vector <std::string> moves;
     int h;
     int g;
 
@@ -58,11 +59,12 @@ std::vector<Node> generateNeighbours(const Node &curr) {
     std::vector<Node> reachable;
     std::array<std::string, 15> testMoves = {"U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "R2", "U2", "D2",
                                              "L2", "F2"};
-    for (std::string move: testMoves) {
+    for (const std::string& move: testMoves) {
         Node node;
         node.cube = Cube(curr.cube.getStickers());
         node.cube.doMoveSequence(move);
-        node.moves = curr.moves + move;
+        node.moves = curr.moves;
+        node.moves.push_back(move);
         reachable.push_back(node);
     }
     return reachable;
@@ -71,156 +73,161 @@ std::vector<Node> generateNeighbours(const Node &curr) {
 std::vector<Node> generateNeighbours2(const Node &curr) {
     std::vector<Node> reachable;
     std::array<std::string, 15> testMoves = {"U", "U'", "F", "F'", "R", "R'", "L", "L'", "R2", "U2", "L2"};
-    for (std::string move: testMoves) {
+    for (const std::string& move: testMoves) {
         Node node;
         node.cube = Cube(curr.cube.getStickers());
         node.cube.doMoveSequence(move);
-        node.moves = curr.moves + move;
+        node.moves = curr.moves;
+        node.moves.push_back(move);
         reachable.push_back(node);
     }
     return reachable;
 }
 
-std::string Cube::cross() {
-    int statesChecked = 0;
-    int maxQueue = 0;
-    int statesGenerated = 0;
+std::vector<std::string> Cube::cross() {
     std::priority_queue<Node> queue;
+
     Node first;
     first.cube = Cube(stickers);
     first.g = 0;
-    first.h = heuristic(first.cube);
+    first.h = Cube::heuristic();
     queue.push(first);
-    std::unordered_set<std::string> visited;
-    visited.insert(first.cube.toString());
+
+    std::unordered_map<std::string, int> bestG;
+    bestG[first.cube.toString()] = 0;
+
     while (!queue.empty()) {
         Node curr = queue.top();
         queue.pop();
-        statesChecked++;
+
         if (curr.cube.isWhiteCrossSolved()) {
-            maxQueue = std::max(maxQueue, (int) queue.size());
-            std::cout << "\nStates generated: " << statesGenerated << "\nStates checked: " << statesChecked
-                      << "\nMax Queue: " << maxQueue << "\nSolution: ";
             return curr.moves;
         }
 
-        for (Node neighbour: generateNeighbours(curr)) {
-            statesGenerated++;
+        for (Node neighbour : generateNeighbours(curr)) {
             std::string key = neighbour.cube.toString();
-            neighbour.g = curr.g + 1;
-            neighbour.h = heuristic(neighbour.cube);
 
-            if (!visited.contains(key)) {
-                visited.insert(key);
+            neighbour.g = curr.g + 1;
+            neighbour.h = neighbour.cube.heuristic();
+
+            if (!bestG.contains(key) || neighbour.g < bestG[key]) {
+                bestG[key] = neighbour.g;
                 queue.push(neighbour);
             }
         }
     }
 
-    return "No solution found";
+    return {"No solution found"};
+}
+
+std::vector<std::string> Cube::firstPair() {
+    std::vector<std::string> bestSolution;
+    int bestPairScore = 9999;
+    for(const auto& pair : f2l){
+        int tries = 2;
+        int fails = 2;
+        std::priority_queue<Node> queue;
+        Node first;
+        first.cube = Cube(stickers);
+        first.g = 0;
+        first.h = first.cube.heuristic();
+        queue.push(first);
+        std::unordered_map<std::string, int> bestG;
+        bestG[first.cube.toString()] = 0;
+        while (!queue.empty()) {
+            Node curr = queue.top();
+            queue.pop();
+            std::string currKey = curr.cube.toString();
+
+            if (curr.g > bestG[currKey]) {
+                continue;
+            }
+
+            if(curr.moves.size()>10&&bestPairScore<9){
+                std::cout << "\nPair" << pair << "is over because size: " << curr.moves.size() << " best score: " << bestPairScore;
+                queue={};
+                continue;
+            }
+
+            if (curr.cube.goal(pair)) {
+//                std::cout << "\n"<<pair << " solution: ";
+//                for(const std::string& poop : curr.moves){
+//                    std::cout << poop << " ";
+//                }
+                int score = evaluateSolution(curr.moves);
+                if(score<bestPairScore){
+                    bestSolution = curr.moves;
+                    bestPairScore = score;
+                }
+                if(score==0){
+                    std::cout <<"\n"<< pair << " is already paired!";
+                    return {};
+                }
+                if(score>15){
+                    fails--;
+                }
+                if(score<8){
+                    tries--;
+                }
+                if((score<5||tries<0||fails<0)){
+                    std::cout <<"\n" <<pair << "\nIt's over because score:  "<< score << " tries: " << tries << " fails: " << fails << "\nbest score: " << bestPairScore;
+                    queue={};
+                }
+                 continue;
+            }
+
+            for (Node neighbour: generateNeighbours2(curr)) {
+                std::string key = neighbour.cube.toString();
+
+                neighbour.g = curr.g + 1;
+                neighbour.h = neighbour.cube.pairHeuristic(pair);
+
+                if (!bestG.contains(key) || neighbour.g < bestG[key]) {
+                    bestG[key] = neighbour.g;
+                    queue.push(neighbour);
+                }
+            }
+
+        }
+    }
+    std::cout << "\nWith a score of " << bestPairScore << ", the winner is: ";
+    return bestSolution;
 
 }
 
-std::string Cube::firstPair() {
-    std::string rotation;
-    int count = 0;
-    for (const auto &[key, value]: edges) {
-        if (coloursAtEdge(key).find('Y') == std::string::npos) {
-            if (stickers[value[0]] == 'B' || stickers[value[0]] == 'G') {
-                count++;
-            }
-        }
-    }
-    if (count < 2) {
-        doMoveSequence("y");
-        rotation += 'y';
-    }
 
-    std::string bestSolution;
-
-    int statesChecked = 0;
-    int maxQueue = 0;
-    int statesGenerated = 0;
-    std::priority_queue<Node> queue;
-    Node first;
-    first.moves = rotation;
-    first.cube = Cube(stickers);
-    first.g = 0;
-    first.h = heuristic(first.cube);
-    queue.push(first);
-    std::unordered_set<std::string> visited;
-    visited.insert(first.cube.toString());
-    while (!queue.empty()) {
-        Node curr = queue.top();
-        queue.pop();
-        statesChecked++;
-        if (curr.cube.goal()) {
-            maxQueue = std::max(maxQueue, (int) queue.size());
-            std::cout << "\nStates generated: " << statesGenerated << "\nStates checked: " << statesChecked
-                      << "\nMax Queue: " << maxQueue << "\nSolution: ";
-            return curr.moves;
-        }
-
-        for (Node neighbour: generateNeighbours2(curr)) {
-            statesGenerated++;
-            std::string key = neighbour.cube.toString();
-            neighbour.g = curr.g + 1;
-            neighbour.h = pairHeuristic(neighbour.cube);
-
-            if (!visited.contains(key)) {
-                visited.insert(key);
-                queue.push(neighbour);
-            }
-        }
-
-    }
-
-    return "No solution found";
-
-}
-
-
-int Cube::heuristic(Cube cube) {
+int Cube::heuristic() {
     int score = 0;
-    if (cube.stickers[46] != 'W')
+    if (stickers[46] != 'W')
         score += 2;
-    if (cube.stickers[48] != 'W')
+    if (stickers[48] != 'W')
         score += 2;
-    if (cube.stickers[50] != 'W')
+    if (stickers[50] != 'W')
         score += 2;
-    if (cube.stickers[52] != 'W')
+    if (stickers[52] != 'W')
         score += 2;
     return score;
 }
 
-int Cube::pairHeuristic(Cube cube) {
+int Cube::pairHeuristic(const std::string& pair) {
+    //TODO: improve ts
+    //Counts white on the cross
     int score = 0;
-    if (cube.stickers[46] != 'W')
+    if (stickers[46] != 'W')
         score++;
-    if (cube.stickers[48] != 'W')
+    if (stickers[48] != 'W')
         score++;
-    if (cube.stickers[50] != 'W')
+    if (stickers[50] != 'W')
         score++;
-    if (cube.stickers[52] != 'W')
+    if (stickers[52] != 'W')
         score++;
 
-    score += cube.bestPairScore();
+    //is it paired?
+    if (!isPaired(pair))
+        score += 8;
 
 
     return score;
-}
-
-int Cube::bestPairScore() {
-    int bestScore = 9999;
-
-    for (const auto &pair: f2l) {
-        int score = 0;
-        if (!isPaired(pair))
-            score += 4;
-        bestScore = std::min(bestScore, score);
-
-    }
-    return bestScore;
 }
 
 int Cube::countOrientedEdges() {
@@ -235,9 +242,63 @@ int Cube::countOrientedEdges() {
     return count;
 }
 
-bool Cube::goal() {
-    return (((isPairSolved("WGR") || isPairSolved("WBR") || isPairSolved("WGO") || isPairSolved("WBO")) &
-             (isWhiteCrossSolved())));
+int Cube::countAnnoyingYellows() {
+    int count = 4;
+    for (const auto edge: annoyingYellows) {
+        if (stickers[edge] == 'Y') {
+            count++;
+        }
+    }
+    return count;
+}
+
+int Cube::countFMoves(const std::vector<std::string>& solutionV) {
+    std::string solutionS;
+    for(const auto& move: solutionV)
+        solutionS+=move;
+    int count = 0;
+    for (const auto move: solutionS) {
+        if (move=='F')
+            count++;
+    }
+    return count;
+}
+int Cube::countDoubleMoves(const std::vector<std::string>& solutionV) {
+    std::string solutionS;
+    for(const auto& move: solutionV)
+        solutionS+=move;
+    int count = 0;
+    for (const auto move: solutionS) {
+        if (move=='2')
+            count++;
+    }
+    return count;
+}
+bool Cube::goal(const std::string& pair) {
+    return isPaired(pair) && isWhiteCrossSolved();
+}
+
+int Cube::oneFace(const std::vector<std::string>& solution){
+    std::string solutionS;
+    for(std::string string: solution){
+        solutionS+=string;
+    }
+    bool right = false;
+    bool left = false;
+    for(char i : solutionS){
+        if(i=='R'){
+            right = true;
+        }
+        if(i=='L'){
+            left = true;
+        }
+    }
+    int count = 0;
+    if(right)
+        count++;
+    if(left)
+        count++;
+    return count<2;
 }
 
 int Cube::countF2LNotPaired() {
@@ -356,7 +417,7 @@ void Cube::doRotation(const std::string &rotation) {
             stickers[i] = stickers[i + 9];
         }
         for (int i = 9; i < 18; ++i)
-            stickers[i] = stickers[i + 36];
+           stickers[i] = stickers[i + 36];
         for (int i = 45; i < 54; ++i)
             stickers[i] = stickers[i - 18];
         for (int i = 27; i < 36; ++i)
@@ -420,6 +481,12 @@ void Cube::doMoveSequence(const std::string &move) {
                 doMove(curr);
             }
         }
+    }
+}
+
+void Cube::doMoveSequence(const std::vector<std::string> &moves) {
+    for(std::string move : moves){
+        doMoveSequence(move);
     }
 }
 
@@ -528,95 +595,165 @@ bool Cube::sameEdge(std::string edge1, std::string edge2) const {
     return edge1 == edge2;
 }
 
-bool Cube::isPaired(const std::string &cornerColours) {
-
-    int count = 0;
-    std::string cornerPos = findCorner(cornerColours);
-    std::array pairCols = corners[cornerPos];
-    char crossLayer = findWhiteOfCorner(cornerPos);
-    if (crossLayer == 'U') {
-        for (int i = 0; i < 3; i++) {
-            if (cornerPos[i] != crossLayer) {
-                int pos = pairCols[i];
-                if (stickers[pos] == stickers[pos + 3]) {
-                    count++;
-                }
-            }
-        }
-    } else if (crossLayer == 'D') {
-        for (int i = 0; i < 3; i++) {
-            if (cornerPos[i] != crossLayer) {
-                int pos = pairCols[i];
-                if (stickers[pos] == stickers[pos - 3]) {
-                    count++;
-                }
-            }
-        }
-    } else if (crossLayer == 'R') {
-        for (int i = 0; i < 3; i++) {
-            if (cornerPos[i] != crossLayer) {
-                int pos = pairCols[i];
-                if (stickers[pos] == stickers[pos - 1]) {
-                    count++;
-                }
-            }
-        }
-    } else if (crossLayer == 'L') {
-        for (int i = 0; i < 3; i++) {
-            if (cornerPos[i] != crossLayer) {
-                int pos = pairCols[i];
-                int k;
-                if (cornerPos[i] == 'B') {
-                    k = -1;
-                } else {
-                    k = 1;
-                }
-                if (stickers[pos] == stickers[pos + k]) {
-                    count++;
-                }
-            }
-        }
-    } else if (crossLayer == 'F') {
-        for (int i = 0; i < 3; i++) {
-            if (cornerPos[i] != crossLayer) {
-                int k;
-                int pos = pairCols[i];
-                if (cornerPos[i] == 'L') {
-                    k = -1;
-                } else if (cornerPos[i] == 'R') {
-                    k = 1;
-                } else if (cornerPos[i] == 'D') {
-                    k = 3;
-                } else if (cornerPos[i] == 'U') {
-                    k = -3;
-                }
-                if (stickers[pos] == stickers[pos + k]) {
-                    count++;
-                }
-            }
-        }
-    } else if (crossLayer == 'B') {
-        for (int i = 0; i < 3; i++) {
-            if (cornerPos[i] != crossLayer) {
-                int k;
-                int pos = pairCols[i];
-                if (cornerPos[i] == 'L') {
-                    k = 1;
-                } else if (cornerPos[i] == 'R') {
-                    k = -1;
-                } else if (cornerPos[i] == 'D') {
-                    k = -3;
-                } else if (cornerPos[i] == 'U') {
-                    k = 3;
-                }
-                if (stickers[pos] == stickers[pos + k]) {
-                    count++;
-                }
-            }
-        }
+bool Cube::isJoint(const std::string &pair) {
+    bool flag = false;
+    if(pair=="WGO"){
+        if(stickers[6]=='G'&&stickers[7]=='G'&&stickers[18]=='O'&&stickers[19]=='O')
+            flag = true;
+        if(stickers[8]=='G'&&stickers[5]=='G'&&stickers[27]=='O'&&stickers[28]=='O')
+            flag = true;
+        if(stickers[2]=='G'&&stickers[1]=='G'&&stickers[36]=='O'&&stickers[37]=='O')
+            flag = true;
+        if(stickers[0]=='G'&&stickers[3]=='G'&&stickers[9]=='O'&&stickers[10]=='O')
+            flag = true;
+        if(stickers[7]=='O'&&stickers[8]=='O'&&stickers[19]=='G'&&stickers[20]=='G')
+            flag = true;
+        if(stickers[2]=='O'&&stickers[5]=='O'&&stickers[28]=='G'&&stickers[29]=='G')
+            flag = true;
+        if(stickers[0]=='O'&&stickers[1]=='O'&&stickers[37]=='G'&&stickers[38]=='G')
+            flag = true;
+        if(stickers[6]=='O'&&stickers[3]=='O'&&stickers[10]=='G'&&stickers[11]=='G')
+            flag = true;
     }
+    else if(pair=="WGR"){
+        if(stickers[7]=='G'&&stickers[8]=='G'&&stickers[19]=='R'&&stickers[20]=='R')
+            flag = true;
+        if(stickers[2]=='G'&&stickers[5]=='G'&&stickers[28]=='R'&&stickers[29]=='R')
+            flag = true;
+        if(stickers[0]=='G'&&stickers[1]=='G'&&stickers[37]=='R'&&stickers[38]=='R')
+            flag = true;
+        if(stickers[6]=='G'&&stickers[3]=='G'&&stickers[10]=='R'&&stickers[11]=='R')
+            flag = true;
+        if(stickers[6]=='R'&&stickers[7]=='R'&&stickers[18]=='G'&&stickers[19]=='G')
+            flag = true;
+        if(stickers[8]=='R'&&stickers[5]=='R'&&stickers[27]=='G'&&stickers[28]=='G')
+            flag = true;
+        if(stickers[2]=='R'&&stickers[1]=='R'&&stickers[36]=='G'&&stickers[37]=='G')
+            flag = true;
+        if(stickers[0]=='R'&&stickers[3]=='R'&&stickers[9]=='G'&&stickers[10]=='G')
+            flag = true;
+    }
+    else if(pair=="WOB"){
+        if(stickers[7]=='B'&&stickers[8]=='B'&&stickers[19]=='O'&&stickers[20]=='O')
+            flag = true;
+        if(stickers[2]=='B'&&stickers[5]=='B'&&stickers[28]=='O'&&stickers[29]=='O')
+            flag = true;
+        if(stickers[0]=='B'&&stickers[1]=='B'&&stickers[37]=='O'&&stickers[38]=='O')
+            flag = true;
+        if(stickers[6]=='B'&&stickers[3]=='B'&&stickers[10]=='O'&&stickers[11]=='O')
+            flag = true;
+        if(stickers[6]=='O'&&stickers[7]=='O'&&stickers[18]=='B'&&stickers[19]=='B')
+            flag = true;
+        if(stickers[8]=='O'&&stickers[5]=='O'&&stickers[27]=='B'&&stickers[28]=='B')
+            flag = true;
+        if(stickers[2]=='O'&&stickers[1]=='O'&&stickers[36]=='B'&&stickers[37]=='B')
+            flag = true;
+        if(stickers[0]=='O'&&stickers[3]=='O'&&stickers[9]=='B'&&stickers[10]=='B')
+            flag = true;
 
-    return count > 1;
+    }
+    else if(pair=="WBR"){
+        if(stickers[6]=='B'&&stickers[7]=='B'&&stickers[18]=='R'&&stickers[19]=='R')
+            flag = true;
+        if(stickers[8]=='B'&&stickers[5]=='B'&&stickers[27]=='R'&&stickers[28]=='R')
+            flag = true;
+        if(stickers[2]=='B'&&stickers[1]=='B'&&stickers[36]=='R'&&stickers[37]=='R')
+            flag = true;
+        if(stickers[0]=='B'&&stickers[3]=='B'&&stickers[9]=='R'&&stickers[10]=='R')
+            flag = true;
+        if(stickers[7]=='R'&&stickers[8]=='R'&&stickers[19]=='B'&&stickers[20]=='B')
+            flag = true;
+        if(stickers[2]=='R'&&stickers[5]=='R'&&stickers[28]=='B'&&stickers[29]=='B')
+            flag = true;
+        if(stickers[0]=='R'&&stickers[1]=='R'&&stickers[37]=='B'&&stickers[38]=='B')
+            flag = true;
+        if(stickers[6]=='R'&&stickers[3]=='R'&&stickers[10]=='B'&&stickers[11]=='B')
+            flag = true;
+
+    }
+    return flag;
+}
+bool Cube:: isPaired(const std::string& pair){
+    return isSplitPaired(pair)||isJoint(pair);
+}
+
+bool Cube::isSplitPaired(const std::string& pair){
+    bool flag = false;
+    if(pair=="WGO"){
+        if(stickers[8]=='O'&&stickers[37]=='O'&&stickers[1]=='G'&&stickers[20]=='G')
+            flag = true;
+        if(stickers[2]=='O'&&stickers[10]=='O'&&stickers[3]=='G'&&stickers[29]=='G')
+            flag = true;
+        if(stickers[0]=='O'&&stickers[19]=='O'&&stickers[7]=='G'&&stickers[38]=='G')
+            flag = true;
+        if(stickers[6]=='O'&&stickers[28]=='O'&&stickers[5]=='G'&&stickers[11]=='G')
+            flag = true;
+        if(stickers[6]=='G'&&stickers[37]=='G'&&stickers[18]=='O'&&stickers[1]=='O')
+            flag = true;
+        if(stickers[8]=='G'&&stickers[10]=='G'&&stickers[27]=='O'&&stickers[3]=='O')
+            flag = true;
+        if(stickers[2]=='G'&&stickers[19]=='G'&&stickers[36]=='O'&&stickers[7]=='O')
+            flag = true;
+        if(stickers[0]=='G'&&stickers[28]=='G'&&stickers[9]=='O'&&stickers[5]=='O')
+            flag = true;
+    }
+    else if(pair=="WGR"){
+        if(stickers[6]=='R'&&stickers[37]=='R'&&stickers[18]=='G'&&stickers[1]=='G')
+            flag = true;
+        if(stickers[8]=='R'&&stickers[10]=='R'&&stickers[27]=='G'&&stickers[3]=='G')
+            flag = true;
+        if(stickers[2]=='R'&&stickers[19]=='R'&&stickers[36]=='G'&&stickers[7]=='G')
+            flag = true;
+        if(stickers[0]=='R'&&stickers[28]=='R'&&stickers[9]=='G'&&stickers[5]=='G')
+            flag = true;
+        if(stickers[8]=='G'&&stickers[37]=='G'&&stickers[1]=='R'&&stickers[20]=='R')
+            flag = true;
+        if(stickers[2]=='G'&&stickers[10]=='G'&&stickers[3]=='R'&&stickers[29]=='R')
+            flag = true;
+        if(stickers[0]=='G'&&stickers[19]=='G'&&stickers[7]=='R'&&stickers[38]=='R')
+            flag = true;
+        if(stickers[6]=='G'&&stickers[28]=='G'&&stickers[5]=='R'&&stickers[11]=='R')
+            flag = true;
+    }
+    else if(pair=="WOB"){
+        if(stickers[6]=='O'&&stickers[37]=='O'&&stickers[18]=='B'&&stickers[1]=='B')
+            flag = true;
+        if(stickers[8]=='O'&&stickers[10]=='O'&&stickers[27]=='B'&&stickers[3]=='B')
+            flag = true;
+        if(stickers[2]=='O'&&stickers[19]=='O'&&stickers[36]=='B'&&stickers[7]=='B')
+            flag = true;
+        if(stickers[0]=='O'&&stickers[28]=='O'&&stickers[9]=='B'&&stickers[5]=='B')
+            flag = true;
+        if(stickers[8]=='B'&&stickers[37]=='B'&&stickers[1]=='O'&&stickers[20]=='O')
+            flag = true;
+        if(stickers[2]=='B'&&stickers[10]=='B'&&stickers[3]=='O'&&stickers[29]=='O')
+            flag = true;
+        if(stickers[0]=='B'&&stickers[19]=='B'&&stickers[7]=='O'&&stickers[38]=='O')
+            flag = true;
+        if(stickers[6]=='B'&&stickers[28]=='B'&&stickers[5]=='O'&&stickers[11]=='O')
+            flag = true;
+
+    }
+    else if(pair=="WBR"){
+        if(stickers[8]=='R'&&stickers[37]=='R'&&stickers[1]=='B'&&stickers[20]=='B')
+            flag = true;
+        if(stickers[2]=='R'&&stickers[10]=='R'&&stickers[3]=='B'&&stickers[29]=='B')
+            flag = true;
+        if(stickers[0]=='R'&&stickers[19]=='R'&&stickers[7]=='B'&&stickers[38]=='B')
+            flag = true;
+        if(stickers[6]=='R'&&stickers[28]=='R'&&stickers[5]=='B'&&stickers[11]=='B')
+            flag = true;
+        if(stickers[6]=='B'&&stickers[37]=='B'&&stickers[18]=='R'&&stickers[1]=='R')
+            flag = true;
+        if(stickers[8]=='B'&&stickers[10]=='B'&&stickers[27]=='R'&&stickers[3]=='R')
+            flag = true;
+        if(stickers[2]=='B'&&stickers[19]=='B'&&stickers[36]=='R'&&stickers[7]=='R')
+            flag = true;
+        if(stickers[0]=='B'&&stickers[28]=='B'&&stickers[9]=='R'&&stickers[5]=='R')
+            flag = true;
+
+    }
+    return flag;
 }
 
 void Cube::doMove(const char &move) {
@@ -1189,4 +1326,46 @@ void Cube::print() const {
     std::cout << "\n\n";
 
 
+}
+
+int Cube::evaluateSolution(const std::vector<std::string>& solution) {
+    int score = 0;
+    score += solution.size();
+    std::unordered_map<std::string,int> turns;
+    for(const auto& curr : solution){
+        if(curr=="R"||curr=="L"||curr=="F"||curr=="R'"||curr=="L'"||curr=="F'"){
+            turns[curr]++;
+        }
+        if(curr=="F"||curr=="F'"){
+            score+=2;
+        }
+        if(curr=="R2"||curr=="L2"){
+            score++;
+        }
+    }
+    int faceCount = 0;
+    bool balance = true;
+    if(turns.count("R")!=turns.count("R'")||turns.count("R")!=turns.count("R'")||turns.count("R")!=turns.count("R'"))
+        balance = false;
+    if(turns.count("R")||turns.count("R'"))
+        faceCount++;
+    if(turns.count("L")||turns.count("L'"))
+        faceCount++;
+    if(turns.count("F")||turns.count("F'"))
+        faceCount++;
+
+    if(!balance)
+        score+=15;
+
+    if(faceCount>2){
+        score+=10;
+    }
+    else if(faceCount>1){
+        score+=5;
+    }
+
+
+
+
+    return score;
 }
