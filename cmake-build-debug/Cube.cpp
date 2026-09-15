@@ -121,6 +121,26 @@ std::vector<std::string> Cube::cross() {
 }
 
 std::vector<std::string> Cube::firstPair() {
+    for(std::string &pair : f2l){
+        if(goal(pair)){
+            std::cout << "\n"<<pair << " already paired!";
+            return {};
+        }
+    }
+    auto fastTriggers = generateFastTriggers();
+    for(std::vector trigger : fastTriggers){
+        for(std::string &pair : f2l){
+            Cube cube;
+            cube.stickers = stickers;
+            cube.doMoveSequence(trigger);
+            if(cube.goal(pair)){
+                std::cout << "\nPair solution: " << pair << " ";
+                return trigger;
+            }
+        }
+    }
+
+    //FALLBACK A*
     std::vector<std::string> bestSolution;
     int bestPairScore = 9999;
     for(const auto& pair : f2l){
@@ -150,10 +170,10 @@ std::vector<std::string> Cube::firstPair() {
             }
 
             if (curr.cube.goal(pair)) {
-//                std::cout << "\n"<<pair << " solution: ";
-//                for(const std::string& poop : curr.moves){
-//                    std::cout << poop << " ";
-//                }
+                std::cout << "\n"<<pair << " solution: ";
+                for(const std::string& poop : curr.moves){
+                    std::cout << poop << " ";
+                }
                 int score = evaluateSolution(curr.moves);
                 if(score<bestPairScore){
                     bestSolution = curr.moves;
@@ -193,6 +213,59 @@ std::vector<std::string> Cube::firstPair() {
     std::cout << "\nWith a score of " << bestPairScore << ", the winner is: ";
     return bestSolution;
 
+}
+
+std::vector<std::vector<std::string>> Cube::generateFastTriggers()
+{
+    std::vector<std::vector<std::string>> base = {
+            {"R", "U", "R'"},
+            {"R'", "U'", "R"},
+
+            {"L", "U", "L'"},
+            {"L'", "U'", "L"},
+
+            {"R", "U2", "R'"},
+            {"R'", "U2", "R"},
+
+            {"L", "U2", "L'"},
+            {"L'", "U2", "L"}
+    };
+
+    std::vector<std::vector<std::string>> result;
+
+    std::vector<std::string> setups = {
+            "",
+            "U",
+            "U'",
+            "U2",
+            "y",
+            "y, U",
+            "y, U'",
+            "y, U2",
+            "y'",
+            "y', U",
+            "y', U'",
+            "y', U2"
+    };
+
+    for (const auto& setup : setups)
+    {
+        for (auto trigger : base)
+        {
+            std::vector<std::string> sequence;
+
+            if(!setup.empty())
+                sequence.push_back(setup);
+
+            sequence.insert(sequence.end(),
+                            trigger.begin(),
+                            trigger.end());
+
+            result.push_back(sequence);
+        }
+    }
+
+    return result;
 }
 
 

@@ -136,6 +136,7 @@ private:
 
     bool isSplitPaired(const std::string &pair);
 
+    std::vector<std::vector<std::string>> generateFastTriggers();
 };
 
 
