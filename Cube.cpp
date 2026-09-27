@@ -57,8 +57,8 @@ struct Node {
 
 std::vector<Node> generateNeighbours(const Node &curr) {
     std::vector<Node> reachable;
-    std::array<std::string, 15> testMoves = {"U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "R2", "U2", "D2",
-                                             "L2", "F2"};
+    std::array<std::string, 18> testMoves = {"U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "R2", "U2", "D2",
+                                             "L2", "F2","B","B'","B2"};
     for (const std::string& move: testMoves) {
         Node node;
         node.cube = Cube(curr.cube.getStickers());
@@ -100,7 +100,10 @@ std::vector<std::string> Cube::cross() {
         Node curr = queue.top();
         queue.pop();
 
-        if (curr.cube.isWhiteCrossSolved()) {
+//        int score = evaluateCrossSolution(curr.moves);
+
+        if (curr.cube.isWhiteCrossSolved()) {//&score<=80;
+//            std::cout<<"score: "<<score<<" ";
             return curr.moves;
         }
 
@@ -136,11 +139,13 @@ std::vector<std::string> Cube::firstPair() {
             if(cube.goal(pair)){
                 std::cout << "\nPair solution: " << pair << " ";
                 return trigger;
+                }
             }
         }
-    }
+
 
     //FALLBACK A*
+    std::string bestPair;
     std::vector<std::string> bestSolution;
     int bestPairScore = 9999;
     for(const auto& pair : f2l){
@@ -164,24 +169,21 @@ std::vector<std::string> Cube::firstPair() {
             }
 
             if(curr.moves.size()>10&&bestPairScore<9){
-                std::cout << "\nPair" << pair << "is over because size: " << curr.moves.size() << " best score: " << bestPairScore;
+//                std::cout << "\nPair" << pair << "is over because size: " << curr.moves.size() << " best score: " << bestPairScore;
                 queue={};
                 continue;
             }
 
             if (curr.cube.goal(pair)) {
-                std::cout << "\n"<<pair << " solution: ";
-                for(const std::string& poop : curr.moves){
-                    std::cout << poop << " ";
-                }
+//                std::cout << "\n"<<pair << " solution: ";
+//                for(const std::string& poop : curr.moves){
+//                    std::cout << poop << " ";
+//                }
                 int score = evaluateSolution(curr.moves);
                 if(score<bestPairScore){
                     bestSolution = curr.moves;
                     bestPairScore = score;
-                }
-                if(score==0){
-                    std::cout <<"\n"<< pair << " is already paired!";
-                    return {};
+                    bestPair = pair;
                 }
                 if(score>15){
                     fails--;
@@ -190,7 +192,7 @@ std::vector<std::string> Cube::firstPair() {
                     tries--;
                 }
                 if((score<5||tries<0||fails<0)){
-                    std::cout <<"\n" <<pair << "\nIt's over because score:  "<< score << " tries: " << tries << " fails: " << fails << "\nbest score: " << bestPairScore;
+//                    std::cout <<"\n" <<pair << "\nIt's over because score:  "<< score << " tries: " << tries << " fails: " << fails << "\nbest score: " << bestPairScore;
                     queue={};
                 }
                  continue;
@@ -210,7 +212,7 @@ std::vector<std::string> Cube::firstPair() {
 
         }
     }
-    std::cout << "\nWith a score of " << bestPairScore << ", the winner is: ";
+    std::cout << "\nPair solution: " << bestPair << " ";
     return bestSolution;
 
 }
@@ -219,14 +221,15 @@ std::vector<std::vector<std::string>> Cube::generateFastTriggers()
 {
     std::vector<std::vector<std::string>> base = {
             {"R", "U", "R'"},
+            {"R", "U'","R'"},
+            {"R'", "U", "R"},
             {"R'", "U'", "R"},
-
-            {"L", "U", "L'"},
-            {"L'", "U'", "L"},
-
             {"R", "U2", "R'"},
             {"R'", "U2", "R"},
-
+            {"L", "U", "L'"},
+            {"L", "U'", "L'"},
+            {"L'", "U'", "L"},
+            {"L'", "U", "L"},
             {"L", "U2", "L'"},
             {"L'", "U2", "L"}
     };
@@ -239,13 +242,13 @@ std::vector<std::vector<std::string>> Cube::generateFastTriggers()
             "U'",
             "U2",
             "y",
-            "y, U",
-            "y, U'",
-            "y, U2",
+            "y U",
+            "y U'",
+            "y U2",
             "y'",
-            "y', U",
-            "y', U'",
-            "y', U2"
+            "y' U",
+            "y' U'",
+            "y' U2"
     };
 
     for (const auto& setup : setups)
@@ -1400,6 +1403,25 @@ void Cube::print() const {
 
 
 }
+
+int Cube::evaluateCrossSolution(const std::vector<std::string>& trigger) {
+    int score = 0;
+    score += trigger.size()*10;
+    for(const auto& curr : trigger){
+        if(curr=="B"||curr=="B'"||curr=="B2"){
+            score+=10;
+        }
+        if(curr=="R2"||curr=="L2"||curr=="U2"||curr=="B2"||curr=="F2"){
+            score+=5;
+        }
+    }
+    for(int i = 0; i<trigger.size()-3&&trigger.size()>3; i++){
+        if((trigger[i]=="R"&&trigger[i+2]=="R'")||(trigger[i]=="R'"&&trigger[i+2]=="R")||(trigger[i]=="L"&&trigger[i+2]=="L'")||(trigger[i]=="L'"&&trigger[i+2]=="L"))
+            score-=30;
+    }
+    return score;
+}
+
 
 int Cube::evaluateSolution(const std::vector<std::string>& solution) {
     int score = 0;

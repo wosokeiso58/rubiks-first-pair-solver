@@ -50,14 +50,74 @@ cmake_ninja_workdir = D$:/Github/Keibe/cmake-build-debug/
 build cmake_object_order_depends_target_Keibe: phony || CMakeFiles/Keibe.dir
 
 build CMakeFiles/Keibe.dir/main.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:/Github/Keibe/main.cpp || cmake_object_order_depends_target_Keibe
+  DEFINES = -DGLFW_DLL
   DEP_FILE = CMakeFiles\Keibe.dir\main.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -ID:/Github/Keibe/external/imgui -ID:/Github/Keibe/external/imgui/backends -isystem C:/Dev/vcpkg/installed/x64-windows/include
   OBJECT_DIR = CMakeFiles\Keibe.dir
   OBJECT_FILE_DIR = CMakeFiles\Keibe.dir
 
-build CMakeFiles/Keibe.dir/Cube.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:/Github/Keibe/cmake-build-debug/Cube.cpp || cmake_object_order_depends_target_Keibe
+build CMakeFiles/Keibe.dir/Cube.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:/Github/Keibe/Cube.cpp || cmake_object_order_depends_target_Keibe
+  DEFINES = -DGLFW_DLL
   DEP_FILE = CMakeFiles\Keibe.dir\Cube.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -ID:/Github/Keibe/external/imgui -ID:/Github/Keibe/external/imgui/backends -isystem C:/Dev/vcpkg/installed/x64-windows/include
+  OBJECT_DIR = CMakeFiles\Keibe.dir
+  OBJECT_FILE_DIR = CMakeFiles\Keibe.dir
+
+build CMakeFiles/Keibe.dir/external/imgui/imgui.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:/Github/Keibe/external/imgui/imgui.cpp || cmake_object_order_depends_target_Keibe
+  DEFINES = -DGLFW_DLL
+  DEP_FILE = CMakeFiles\Keibe.dir\external\imgui\imgui.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -ID:/Github/Keibe/external/imgui -ID:/Github/Keibe/external/imgui/backends -isystem C:/Dev/vcpkg/installed/x64-windows/include
+  OBJECT_DIR = CMakeFiles\Keibe.dir
+  OBJECT_FILE_DIR = CMakeFiles\Keibe.dir\external\imgui
+
+build CMakeFiles/Keibe.dir/external/imgui/imgui_draw.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:/Github/Keibe/external/imgui/imgui_draw.cpp || cmake_object_order_depends_target_Keibe
+  DEFINES = -DGLFW_DLL
+  DEP_FILE = CMakeFiles\Keibe.dir\external\imgui\imgui_draw.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -ID:/Github/Keibe/external/imgui -ID:/Github/Keibe/external/imgui/backends -isystem C:/Dev/vcpkg/installed/x64-windows/include
+  OBJECT_DIR = CMakeFiles\Keibe.dir
+  OBJECT_FILE_DIR = CMakeFiles\Keibe.dir\external\imgui
+
+build CMakeFiles/Keibe.dir/external/imgui/imgui_tables.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:/Github/Keibe/external/imgui/imgui_tables.cpp || cmake_object_order_depends_target_Keibe
+  DEFINES = -DGLFW_DLL
+  DEP_FILE = CMakeFiles\Keibe.dir\external\imgui\imgui_tables.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -ID:/Github/Keibe/external/imgui -ID:/Github/Keibe/external/imgui/backends -isystem C:/Dev/vcpkg/installed/x64-windows/include
+  OBJECT_DIR = CMakeFiles\Keibe.dir
+  OBJECT_FILE_DIR = CMakeFiles\Keibe.dir\external\imgui
+
+build CMakeFiles/Keibe.dir/external/imgui/imgui_widgets.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:/Github/Keibe/external/imgui/imgui_widgets.cpp || cmake_object_order_depends_target_Keibe
+  DEFINES = -DGLFW_DLL
+  DEP_FILE = CMakeFiles\Keibe.dir\external\imgui\imgui_widgets.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -ID:/Github/Keibe/external/imgui -ID:/Github/Keibe/external/imgui/backends -isystem C:/Dev/vcpkg/installed/x64-windows/include
+  OBJECT_DIR = CMakeFiles\Keibe.dir
+  OBJECT_FILE_DIR = CMakeFiles\Keibe.dir\external\imgui
+
+build CMakeFiles/Keibe.dir/external/imgui/backends/imgui_impl_glfw.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:/Github/Keibe/external/imgui/backends/imgui_impl_glfw.cpp || cmake_object_order_depends_target_Keibe
+  DEFINES = -DGLFW_DLL
+  DEP_FILE = CMakeFiles\Keibe.dir\external\imgui\backends\imgui_impl_glfw.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -ID:/Github/Keibe/external/imgui -ID:/Github/Keibe/external/imgui/backends -isystem C:/Dev/vcpkg/installed/x64-windows/include
+  OBJECT_DIR = CMakeFiles\Keibe.dir
+  OBJECT_FILE_DIR = CMakeFiles\Keibe.dir\external\imgui\backends
+
+build CMakeFiles/Keibe.dir/external/imgui/backends/imgui_impl_opengl3.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:/Github/Keibe/external/imgui/backends/imgui_impl_opengl3.cpp || cmake_object_order_depends_target_Keibe
+  DEFINES = -DGLFW_DLL
+  DEP_FILE = CMakeFiles\Keibe.dir\external\imgui\backends\imgui_impl_opengl3.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -ID:/Github/Keibe/external/imgui -ID:/Github/Keibe/external/imgui/backends -isystem C:/Dev/vcpkg/installed/x64-windows/include
+  OBJECT_DIR = CMakeFiles\Keibe.dir
+  OBJECT_FILE_DIR = CMakeFiles\Keibe.dir\external\imgui\backends
+
+build CMakeFiles/Keibe.dir/Solver.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:/Github/Keibe/Solver.cpp || cmake_object_order_depends_target_Keibe
+  DEFINES = -DGLFW_DLL
+  DEP_FILE = CMakeFiles\Keibe.dir\Solver.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -ID:/Github/Keibe/external/imgui -ID:/Github/Keibe/external/imgui/backends -isystem C:/Dev/vcpkg/installed/x64-windows/include
   OBJECT_DIR = CMakeFiles\Keibe.dir
   OBJECT_FILE_DIR = CMakeFiles\Keibe.dir
 
@@ -69,11 +129,11 @@ build CMakeFiles/Keibe.dir/Cube.cpp.obj: CXX_COMPILER__Keibe_unscanned_Debug D$:
 #############################################
 # Link the executable Keibe.exe
 
-build Keibe.exe: CXX_EXECUTABLE_LINKER__Keibe_Debug CMakeFiles/Keibe.dir/main.cpp.obj CMakeFiles/Keibe.dir/Cube.cpp.obj
+build Keibe.exe: CXX_EXECUTABLE_LINKER__Keibe_Debug CMakeFiles/Keibe.dir/main.cpp.obj CMakeFiles/Keibe.dir/Cube.cpp.obj CMakeFiles/Keibe.dir/external/imgui/imgui.cpp.obj CMakeFiles/Keibe.dir/external/imgui/imgui_draw.cpp.obj CMakeFiles/Keibe.dir/external/imgui/imgui_tables.cpp.obj CMakeFiles/Keibe.dir/external/imgui/imgui_widgets.cpp.obj CMakeFiles/Keibe.dir/external/imgui/backends/imgui_impl_glfw.cpp.obj CMakeFiles/Keibe.dir/external/imgui/backends/imgui_impl_opengl3.cpp.obj CMakeFiles/Keibe.dir/Solver.cpp.obj | C$:/Dev/vcpkg/installed/x64-windows/debug/lib/glfw3dll.lib
   FLAGS = -g
-  LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_LIBRARIES = C:/Dev/vcpkg/installed/x64-windows/debug/lib/glfw3dll.lib  -lopengl32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Keibe.dir
-  POST_BUILD = cd .
+  POST_BUILD = cmd.exe /C "cd /D D:\Github\Keibe\cmake-build-debug && C:\Dev\vcpkg\vcpkg.exe z-applocal --target-binary=D:/Github/Keibe/cmake-build-debug/Keibe.exe --installed-bin-dir=C:/Dev/vcpkg/installed/x64-windows/debug/bin"
   PRE_LINK = cd .
   TARGET_FILE = Keibe.exe
   TARGET_IMPLIB = libKeibe.dll.a
@@ -124,14 +184,14 @@ build all: phony Keibe.exe
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCXXInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeGenericSystem.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeRCInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU-C.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU-CXX.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-C.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-CXX.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-windres.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/3.26.4/CMakeCCompiler.cmake CMakeFiles/3.26.4/CMakeCXXCompiler.cmake CMakeFiles/3.26.4/CMakeRCCompiler.cmake CMakeFiles/3.26.4/CMakeSystem.cmake D$:/Github/Keibe/CMakeLists.txt
+build build.ninja: RERUN_CMAKE | C$:/Dev/vcpkg/installed/x64-windows/share/glfw3/glfw3Config.cmake C$:/Dev/vcpkg/installed/x64-windows/share/glfw3/glfw3ConfigVersion.cmake C$:/Dev/vcpkg/installed/x64-windows/share/glfw3/glfw3Targets-debug.cmake C$:/Dev/vcpkg/installed/x64-windows/share/glfw3/glfw3Targets-release.cmake C$:/Dev/vcpkg/installed/x64-windows/share/glfw3/glfw3Targets.cmake C$:/Dev/vcpkg/scripts/buildsystems/vcpkg.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCXXInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeDependentOption.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeFindDependencyMacro.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeGenericSystem.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeRCInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CheckCSourceCompiles.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CheckIncludeFile.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CheckLibraryExists.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU-C.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU-CXX.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/FindOpenGL.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/FindPackageHandleStandardArgs.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/FindPackageMessage.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/FindThreads.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-C.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-CXX.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-windres.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/3.26.4/CMakeCCompiler.cmake CMakeFiles/3.26.4/CMakeCXXCompiler.cmake CMakeFiles/3.26.4/CMakeRCCompiler.cmake CMakeFiles/3.26.4/CMakeSystem.cmake D$:/Github/Keibe/CMakeLists.txt
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCXXInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeGenericSystem.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeRCInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU-C.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU-CXX.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-C.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-CXX.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-windres.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/3.26.4/CMakeCCompiler.cmake CMakeFiles/3.26.4/CMakeCXXCompiler.cmake CMakeFiles/3.26.4/CMakeRCCompiler.cmake CMakeFiles/3.26.4/CMakeSystem.cmake D$:/Github/Keibe/CMakeLists.txt: phony
+build C$:/Dev/vcpkg/installed/x64-windows/share/glfw3/glfw3Config.cmake C$:/Dev/vcpkg/installed/x64-windows/share/glfw3/glfw3ConfigVersion.cmake C$:/Dev/vcpkg/installed/x64-windows/share/glfw3/glfw3Targets-debug.cmake C$:/Dev/vcpkg/installed/x64-windows/share/glfw3/glfw3Targets-release.cmake C$:/Dev/vcpkg/installed/x64-windows/share/glfw3/glfw3Targets.cmake C$:/Dev/vcpkg/scripts/buildsystems/vcpkg.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCXXInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeDependentOption.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeFindDependencyMacro.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeGenericSystem.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeRCInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CheckCSourceCompiles.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CheckIncludeFile.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/CheckLibraryExists.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU-C.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU-CXX.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Compiler/GNU.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/FindOpenGL.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/FindPackageHandleStandardArgs.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/FindPackageMessage.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/FindThreads.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-C.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU-CXX.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-GNU.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows-windres.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/Windows.cmake C$:/Program$ Files/JetBrains/CLion$ 2023.2.2/bin/cmake/win/x64/share/cmake-3.26/Modules/Platform/WindowsPaths.cmake CMakeCache.txt CMakeFiles/3.26.4/CMakeCCompiler.cmake CMakeFiles/3.26.4/CMakeCXXCompiler.cmake CMakeFiles/3.26.4/CMakeRCCompiler.cmake CMakeFiles/3.26.4/CMakeSystem.cmake D$:/Github/Keibe/CMakeLists.txt: phony
 
 
 #############################################

@@ -137,6 +137,10 @@ private:
     bool isSplitPaired(const std::string &pair);
 
     std::vector<std::vector<std::string>> generateFastTriggers();
+
+    int evaluateTrigger(const std::vector<std::string> &trigger);
+
+    int evaluateCrossSolution(const std::vector<std::string> &trigger);
 };
 
 
