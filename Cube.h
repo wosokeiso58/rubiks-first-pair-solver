@@ -39,7 +39,7 @@ public:
     void doMoveSequence(const std::vector<std::string> &moves);
 
 private:
-    std::array<char, 54> stickers{};
+    std::array<char, 54> stickers;
     std::map<char,int> startPos = {{'U',0},{'L',9},{'F',18},{'R',27},{'B',36},{'D',45}};
     std::unordered_set<char> validChar{'R','r','L','l','F','f','B','b','D','d','U','u','E','S','M','x','y','z'};
     std::array<int,12> oneMove{21, 23, 30, 32, 39, 41, 12, 14, 48, 50, 46, 52};

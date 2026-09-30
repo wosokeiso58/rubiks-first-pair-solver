@@ -11,17 +11,17 @@
 
 Cube::Cube() {
     for (int i = 0; i < 9; ++i)
-        stickers[i] = 'Y';
+        stickers[i] = 'W';
     for (int i = 9; i < 18; ++i)
-        stickers[i] = 'R';
+        stickers[i] = 'O';
     for (int i = 18; i < 27; ++i)
         stickers[i] = 'G';
     for (int i = 27; i < 36; ++i)
-        stickers[i] = 'O';
+        stickers[i] = 'R';
     for (int i = 36; i < 45; ++i)
         stickers[i] = 'B';
     for (int i = 45; i < 54; ++i)
-        stickers[i] = 'W';
+        stickers[i] = 'Y';
 }
 
 Cube::Cube(std::array<char, 54> state) {
@@ -124,6 +124,9 @@ std::vector<std::string> Cube::cross() {
 }
 
 std::vector<std::string> Cube::firstPair() {
+    if(isSolved()){
+        return {};
+    }
     for(std::string &pair : f2l){
         if(goal(pair)){
             std::cout << "\n"<<pair << " already paired!";
