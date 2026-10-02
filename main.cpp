@@ -129,6 +129,7 @@ int main()
             ImGui::Text("Solving...");
         }
         if(state.solved){
+            ImGui::Text("Solved in %lld ms.", state.solveTime);
             ImGui::Checkbox("Show scramble",&state.showScrambleCube);
             if(state.showScrambleCube){
                 drawCube(state.scrambleCube);
@@ -157,17 +158,19 @@ int main()
                 ImGui::Text("First pair already paired!");
             }
             else{
-                ImGui::Text("First pair solution: ");
+                ImGui::Text("First pair solution");
+                ImGui::SameLine();
+                ImGui::Text("(%s):", state.solvedPair.c_str());
                 for(const auto& move : state.pairSolution){
                     ImGui::SameLine();
                     ImGui::Text("%s", move.c_str());
                 }
-            }
-            ImGui::SameLine();
-            ImGui::Checkbox("Show pair",&state.showPairCube);
-            if(state.showPairCube){
-                drawCube(state.pairCube);
-                ImGui::Dummy(ImVec2(400,300));
+                ImGui::SameLine();
+                ImGui::Checkbox("Show pair",&state.showPairCube);
+                if(state.showPairCube){
+                    drawCube(state.pairCube);
+                    ImGui::Dummy(ImVec2(400,300));
+                }
             }
         }
         ImGui::End();

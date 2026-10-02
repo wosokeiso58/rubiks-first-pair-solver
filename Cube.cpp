@@ -140,7 +140,7 @@ std::vector<std::string> Cube::firstPair() {
             cube.stickers = stickers;
             cube.doMoveSequence(trigger);
             if(cube.goal(pair)){
-                std::cout << "\nPair solution: " << pair << " ";
+                trigger.push_back(pair);
                 return trigger;
                 }
             }
